@@ -7,6 +7,7 @@ import service.impl.ProductServiceImpl;
 public class ProductController {
 
 	private final Scanner scanner = new Scanner(System.in);
+	private ProductServiceImpl productService = new ProductServiceImpl();
 
 	public void addProduct() {
 
@@ -24,8 +25,20 @@ public class ProductController {
 
 		Product product = new Product(name, description, price, quantity);
 
-		ProductServiceImpl productService = new ProductServiceImpl();
 		productService.addProduct(product);
+	}
+
+	public void viewProductStock() {
+
+		System.out.println("Enter the product id: ");
+		int id = scanner.nextInt();
+
+		int stock = productService.viewProductStock(id);
+
+		if (stock > 0)
+			System.out.println("Available quantity of this product: " + stock);
+		else
+			System.out.println("Product not found.");
 	}
 
 }

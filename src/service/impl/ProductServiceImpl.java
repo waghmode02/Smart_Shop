@@ -24,4 +24,15 @@ public class ProductServiceImpl implements ProductService {
 			System.out.println("Failed to save the product.");
 	}
 
+	@Override
+	public int viewProductStock(int id) {
+		int stock = productDao.getProductStock(id);
+
+		if (stock == 0)
+			System.out.println("Out of stock! :(");
+
+		return stock;
+
+	}
+
 }

@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class AppController {
 
 	private final Scanner scanner = new Scanner(System.in);
-	private ProductController adminController = new ProductController();
+	private ProductController productController = new ProductController();
 
 	public void startApp() {
 		showAdminMenu();
@@ -35,17 +35,22 @@ public class AppController {
 		while (true) {
 			System.out.println("--------------------");
 			System.out.println("1. Add Product");
-			System.out.println("2. Go Back");
+			System.out.println("2. View Product Stock");
+			System.out.println("3. Go Back");
 			System.out.println("Enter your choice: ");
 
 			int choice = scanner.nextInt();
 
 			switch (choice) {
 			case 1:
-				adminController.addProduct();
+				productController.addProduct();
+				break;
+				
+			case 2:
+				productController.viewProductStock();
 				break;
 
-			case 2:
+			case 3:
 				return;
 
 			default:
