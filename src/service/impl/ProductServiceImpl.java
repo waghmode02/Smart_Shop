@@ -1,5 +1,6 @@
 package service.impl;
 
+import java.util.List;
 import dao.ProductDao;
 import dao.impl.ProductDaoImpl;
 import model.Product;
@@ -26,13 +27,17 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public int viewProductStock(int id) {
-		int stock = productDao.getProductStock(id);
 
-		if (stock == 0)
-			System.out.println("Out of stock! :(");
-
-		return stock;
+		return productDao.getProductStock(id);
 
 	}
+	
+//	Once users feature is enabled, uncomment below changes
+//	@Override
+//	public List<Users> viewRegisteredUsers() {
+//
+//		return productDao.getRegisteredUsers();
+//
+//	}
 
 }
