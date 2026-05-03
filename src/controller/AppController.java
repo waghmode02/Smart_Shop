@@ -2,11 +2,15 @@ package controller;
 
 import java.util.Scanner;
 
+import login.Login;
+import productBrowsing.ProductBrowsingImpl;
+import service.impl.UserRegistrationImpl;
+
 public class AppController {
 
 	private final Scanner scanner = new Scanner(System.in);
 	private ProductController productController = new ProductController();
-
+	private ProductBrowsingImpl productBrowsingImpl=new ProductBrowsingImpl();
 	public void startApp() {
 		showAdminMenu();
 
@@ -20,14 +24,42 @@ public class AppController {
 
 		MenuHandler menuHandler = new MenuHandler();
 		menuHandler.menu();
+		
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Enter your choice >>");
-		int choice = scanner.nextInt();
-		switch (choice) {
-		case 1: {
-		}
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + choice);
+		boolean flag=false;
+		while(!flag) {
+			System.out.println("Enter your choice >>");
+			int choice = scanner.nextInt();
+			switch (choice) {
+			case 1:
+				UserRegistrationImpl userRegistrationImpl=new UserRegistrationImpl();
+				userRegistrationImpl.newUserRegistration();
+				break;
+			case 2:
+				Login.userLogin();
+				break;
+			case 3:
+				productBrowsingImpl.viewAllProduct();
+				break;
+			case 4:
+				productBrowsingImpl.searchProductsbyName();
+				break;
+			case 5:
+				productBrowsingImpl.addToCart();
+				break;
+			case 6:
+				productBrowsingImpl.viewAllCartItem();
+				break;
+			case 7:
+				productBrowsingImpl.viewPurchaseHistory();
+				break;
+			case 8:
+				System.out.println("Thank you..!");
+				flag=true;
+				break;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + choice);
+			}
 		}
 	}
 
