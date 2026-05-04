@@ -9,8 +9,7 @@ import util.DBConnection;
 
 public class Login {
 
-    private static final String loginQuery =
-        "SELECT role FROM users WHERE username=? AND password=?";
+    private static final String loginQuery ="SELECT role FROM users WHERE username=? AND password=?";
 
     public static String userLogin() {
 
@@ -32,7 +31,7 @@ public class Login {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                String role = rs.getString("role"); // admin / user
+                String role = rs.getString("role"); 
                 System.out.println("Login Successful!");
                 return role;
             } else {

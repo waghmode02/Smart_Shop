@@ -14,12 +14,9 @@ public class AppController {
 
     public void startApp() {
 
-        //showAdminMenu();
-
         MenuHandler menuHandler = new MenuHandler();
         menuHandler.menu();
 
-        Scanner scanner = new Scanner(System.in);
         boolean flag = false;
 
         while (!flag) {
@@ -30,12 +27,20 @@ public class AppController {
             switch (choice) {
 
             case 1:
-                UserRegistrationImpl userRegistrationImpl = new UserRegistrationImpl();
-                userRegistrationImpl.newUserRegistration();
+                new UserRegistrationImpl().newUserRegistration();
                 break;
 
             case 2:
-                Login.userLogin();
+                String role = Login.userLogin();
+
+                if ("admin".equalsIgnoreCase(role)) {
+                    System.out.println("Welcome Admin!");
+                    showAdminMenu();
+                } else if ("user".equalsIgnoreCase(role)) {
+                    System.out.println("Welcome User!");
+                } else {
+                    System.out.println("Login Failed!");
+                }
                 break;
 
             case 3:
@@ -64,7 +69,7 @@ public class AppController {
                 break;
 
             default:
-                throw new IllegalArgumentException("Unexpected value: " + choice);
+                System.out.println("Invalid Choice!");
             }
         }
     }
@@ -73,16 +78,15 @@ public class AppController {
 
         while (true) {
 
-            System.out.println("--------------------");
+            System.out.println("\n------ ADMIN MENU ------");
             System.out.println("1. Add Product");
             System.out.println("2. View Product Stock");
             System.out.println("3. View Registered Users");
             System.out.println("4. View Purchase History");
             System.out.println("5. Update Product Details");
-            System.out.println("6. Delete the product from inventory");
-            System.out.println("7. Go Back");
-            System.out.println("Enter your choice: ");
+            System.out.println("6. Go Back");
 
+            System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
 
             switch (choice) {
@@ -108,14 +112,10 @@ public class AppController {
                 break;
 
             case 6:
-                productController.deleteProduct();
-                break;
-
-            case 7:
                 return;
 
             default:
-                System.out.println("Invalid Choice :(");
+                System.out.println("Invalid Choice!");
             }
         }
     }

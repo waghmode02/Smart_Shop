@@ -1,3 +1,4 @@
+
 package productBrowsing;
 
 import java.sql.Connection;
@@ -10,144 +11,143 @@ import util.DBConnection;
 
 public class ProductBrowsingImpl implements ProductBrowsing {
 
-	public static final String QUANTITY_CHECK_QUERY = "SELECT quantity FROM products WHERE product_id = ?";
-	public static final String INSERT_QUERY = "insert into purchases (user_id, product_id, quantity) values (?,?,?)";
-	public static final String UPDATE_QUERY = "update products set quantity =? where product_id=?";
+    public static final String QUANTITY_CHECK_QUERY = "SELECT quantity FROM products WHERE product_id = ?";
+    public static final String INSERT_QUERY = "insert into purchases (user_id, product_id, quantity) values (?,?,?)";
+    public static final String UPDATE_QUERY = "update products set quantity = quantity - ? where product_id=?";
 
-	@Override
-	public void viewAllProduct() {
-		System.out.println("Displaying all products in sorted order:");
-		try {
-			Connection conn = DBConnection.getConnection();
-			String query = "select * from products";
-			PreparedStatement ps = conn.prepareStatement(query);
-			ResultSet rs = ps.executeQuery();
-			System.out.println("Product ID | Name | Description | Price | Quantity");
+    @Override
+    public void viewAllProduct() {
+        System.out.println("Displaying all products:");
+        try {
+            Connection conn = DBConnection.getConnection();
+            String query = "select * from products";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
 
-			while (rs.next()) {
-				System.out.println(
-					rs.getInt("product_id") + " |" +
-					rs.getString("product_name") + " | " +
-					rs.getString("description") + " |" +
-					rs.getBigDecimal("price") + " |" +
-					rs.getInt("quantity")
-				);
-			}
+            System.out.println("Product ID | Name | Description | Price | Quantity");
 
-			System.out.println("---------------------------------------------------------");
+            while (rs.next()) {
+                System.out.println(
+                        rs.getInt("product_id") + " | " +
+                        rs.getString("product_name") + " | " +
+                        rs.getString("description") + " | " +
+                        rs.getBigDecimal("price") + " | " +
+                        rs.getInt("quantity")
+                );
+            }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            System.out.println("---------------------------------------------------------");
 
-	@Override
-	public void searchProductsbyName() {
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Enter product name to search >>");
-		String keyword = scanner.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-		try {
-			boolean found = false;
+    @Override
+    public void searchProductsbyName() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter product name to search >>");
+        String keyword = scanner.next();
 
-			Connection conn = DBConnection.getConnection();
-			String query = "select * from products where product_name like ?";
-			PreparedStatement ps = conn.prepareStatement(query);
+        try {
+            boolean found = false;
+            Connection conn = DBConnection.getConnection();
+            String query = "select * from products where product_name like ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, "%" + keyword + "%");
 
-			ps.setString(1, "%" + keyword + "%");
+            ResultSet rs = ps.executeQuery();
 
-			ResultSet rs = ps.executeQuery();
+            System.out.println("Product ID | Name | Description | Price | Quantity");
 
-			System.out.println("Product ID | Name | Description | Price | Quantity");
+            while (rs.next()) {
+                found = true;
+                System.out.println(
+                        rs.getInt("product_id") + " | " +
+                        rs.getString("product_name") + " | " +
+                        rs.getString("description") + " | " +
+                        rs.getBigDecimal("price") + " | " +
+                        rs.getInt("quantity")
+                );
+            }
 
-			while (rs.next()) {
-				found = true;
+            if (!found) {
+                System.out.println("Products not found!");
+            }
 
-				System.out.println(
-					rs.getInt("product_id") + " |" +
-					rs.getString("product_name") + " | " +
-					rs.getString("description") + " |" +
-					rs.getBigDecimal("price") + " |" +
-					rs.getInt("quantity")
-				);
-			}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-			if (!found) {
-				System.out.println("products are not found..!");
-			}
+    @Override
+    public void viewPurchaseHistory() {
+        // TODO
+    }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void viewAllCartItem() {
+        // TODO
+    }
 
-	@Override
-	public void viewPurchaseHistory() {
-		// TODO Auto-generated method stub
-	}
+    @Override
+    public void addToCart() {
 
-	@Override
-	public void viewAllCartItem() {
-		// TODO Auto-generated method stub
-	}
+        Scanner scanner = new Scanner(System.in);
 
-	@Override
-	public void addToCart() {
+        System.out.println("Enter the user ID: ");
+        int userId = scanner.nextInt();
 
-		Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the product ID: ");
+        int productId = scanner.nextInt();
 
-		System.out.println("Enter the user ID: ");
-		int userId = scanner.nextInt();
+        System.out.println("Enter Quantity: ");
+        int quantity = scanner.nextInt();
 
-		System.out.println("Enter the product ID: ");
-		int productId = scanner.nextInt();
+        try {
+            Connection con = DBConnection.getConnection();
 
-		System.out.println("Enter Quantity: ");
-		int quantity = scanner.nextInt();
+            // Check stock
+            PreparedStatement ps = con.prepareStatement(QUANTITY_CHECK_QUERY);
+            ps.setInt(1, productId);
 
-		Connection con = null;
+            ResultSet rs = ps.executeQuery();
 
-		try {
-			con = DBConnection.getConnection();
+            if (!rs.next()) {
+                System.out.println("Product not found!");
+                return;
+            }
 
-			PreparedStatement ps = con.prepareStatement(QUANTITY_CHECK_QUERY);
-			ps.setInt(1, productId);
+            int availableQuantity = rs.getInt("quantity");
 
-			ResultSet rs = ps.executeQuery();
+            if (quantity > availableQuantity) {
+                System.out.println("Stock Unavailable!");
+                return;
+            }
 
-			if (!rs.next()) {
-				System.out.println("Product not found!");
-				return;
-			}
+            // Insert purchase
+            PreparedStatement ps1 = con.prepareStatement(INSERT_QUERY);
+            ps1.setInt(1, userId);
+            ps1.setInt(2, productId);
+            ps1.setInt(3, quantity);
 
-			int availableQuantity = rs.getInt("quantity");
+            int purchaseResult = ps1.executeUpdate();
 
-			if (quantity > availableQuantity) {
-				System.out.println("Stock Unavaialable!");
-				return;
-			}
+            // Update stock
+            PreparedStatement ps2 = con.prepareStatement(UPDATE_QUERY);
+            ps2.setInt(1, quantity);
+            ps2.setInt(2, productId);
 
-			PreparedStatement ps1 = con.prepareStatement(INSERT_QUERY);
-			ps1.setInt(1, userId);
-			ps1.setInt(2, productId);
-			ps1.setInt(3, quantity);
+            int updateResult = ps2.executeUpdate();
 
-			int purchaseResult = ps1.executeUpdate();
+            if (purchaseResult > 0 && updateResult > 0) {
+                System.out.println("Product added to cart successfully!");
+            } else {
+                System.out.println("Failed to add to cart!");
+            }
 
-			PreparedStatement ps2 = con.prepareStatement(UPDATE_QUERY);
-			ps2.setInt(1, quantity);
-			ps2.setInt(2, productId);
-
-			int result = ps2.executeUpdate();
-
-			if (purchaseResult > 0 && result > 0) {
-				System.out.println("Product added to cart successfully!");
-			} else {
-				System.out.println("Failed to add to cart. Retry!");
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
