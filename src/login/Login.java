@@ -39,6 +39,7 @@ public class Login {
                 System.out.println("Invalid Username or Password");
                 return null;
             }
+<<<<<<< HEAD
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -46,3 +47,13 @@ public class Login {
         }
     }
 }
+=======
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Error: "+e.getMessage());
+		}
+		//scanner.close();
+		
+	}
+}
+>>>>>>> 9d811bd3c8217ce15ebbbfac488fccb87812d48e

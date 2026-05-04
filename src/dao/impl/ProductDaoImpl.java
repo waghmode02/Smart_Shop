@@ -13,12 +13,15 @@ import util.DBConnection;
 
 public class ProductDaoImpl implements ProductDao {
 
-	private static final String INSERT_QUERY = "insert into products (product_name, description, price, quantity) values (?, ?, ?, ?)";
+	private static final String INSERT_PRODUCT = "insert into products (product_name, description, price, quantity) values (?, ?, ?, ?)";
 	private static final String SELECT_QUERY = "select quantity from products where product_id = ?";
 	private static final String USERS_QUERY = "select user_id, first_name, last_name, username, city, email, mobile, role from users";
 	private static final String PURCHASE_HISTORY_QUERY = "SELECT products.product_id, products.product_name, products.description, products.price, purchases.quantity "
 			+ "FROM purchases " + "INNER JOIN users ON purchases.user_id = users.user_id "
 			+ "INNER JOIN products ON purchases.product_id = products.product_id " + "WHERE users.username = ?";
+
+	private static final String DELETE_PRODUCT = "delete from products where product_id = ?";
+	private static final String DELETE_PURCHASES = "delete from purchases where product_id = ?";
 
 	@Override
 	public boolean save(Product product) {
@@ -26,7 +29,7 @@ public class ProductDaoImpl implements ProductDao {
 			Connection con = null;
 
 			con = DBConnection.getConnection();
-			PreparedStatement ps = con.prepareStatement(INSERT_QUERY);
+			PreparedStatement ps = con.prepareStatement(INSERT_PRODUCT);
 
 			ps.setString(1, product.getName());
 			ps.setString(2, product.getDescription());
@@ -123,48 +126,70 @@ public class ProductDaoImpl implements ProductDao {
 
 	@Override
 	public void updateProductDetails(int id, String name, String description, double price, int quantity) {
-		
+
 		String query = "";
 
-	    if (name != null) {
-	        query = "UPDATE products SET product_name = ? WHERE product_id = ?";
-	    } else if (description != null) {
-	        query = "UPDATE products SET description = ? WHERE product_id = ?";
-	    } else if (price != -1) {
-	        query = "UPDATE products SET price = ? WHERE product_id = ?";
-	    } else if (quantity != -1) {
-	        query = "UPDATE products SET quantity = ? WHERE product_id = ?";
-	    } else {
-	        System.out.println("No valid field to update.");
-	        return;
-	    }
-	    
+		if (name != null) {
+			query = "UPDATE products SET product_name = ? WHERE product_id = ?";
+		} else if (description != null) {
+			query = "UPDATE products SET description = ? WHERE product_id = ?";
+		} else if (price != -1) {
+			query = "UPDATE products SET price = ? WHERE product_id = ?";
+		} else if (quantity != -1) {
+			query = "UPDATE products SET quantity = ? WHERE product_id = ?";
+		} else {
+			System.out.println("No valid field to update.");
+			return;
+		}
+
 		Connection con = null;
 		try {
 			con = DBConnection.getConnection();
 			PreparedStatement ps = con.prepareStatement(query);
-			
-			if(name!=null)
+
+			if (name != null)
 				ps.setString(1, name);
 			else if (description != null)
 				ps.setString(1, description);
-			else if(price < 0 )
+			else if (price < 0)
 				ps.setDouble(1, price);
-			else if(quantity < 0)
+			else if (quantity < 0)
 				ps.setInt(1, quantity);
-			
+
 			ps.setInt(2, id);
-			
+
 			int rows = ps.executeUpdate();
 
-	        if (rows > 0)
-	            System.out.println("Product updated successfully!");
-	        else
-	            System.out.println("Product not found.");
-			
+			if (rows > 0)
+				System.out.println("Product updated successfully!");
+			else
+				System.out.println("Product not found.");
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
+	}
+
+	@Override
+	public boolean deleteProduct(int productId) {
+		Connection con = null;
+
+		try {
+			con = DBConnection.getConnection();
+			PreparedStatement ps = con.prepareStatement(DELETE_PURCHASES);
+			ps.setInt(1, productId);
+			ps.executeUpdate();
+
+			PreparedStatement ps1 = con.prepareStatement(DELETE_PRODUCT);
+			ps1.setInt(1, productId);
+
+			int rows = ps1.executeUpdate();
+
+			return rows > 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

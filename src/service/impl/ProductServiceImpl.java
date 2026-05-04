@@ -37,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
 	public List<User> viewRegisteredUsers() {
 
 		return productDao.getRegisteredUsers();
-		
+
 	}
 
 	@Override
@@ -49,6 +49,15 @@ public class ProductServiceImpl implements ProductService {
 	public void updateProductDetails(int id, String name, String description, double price, int quantity) {
 		productDao.updateProductDetails(id, name, description, price, quantity);
 	}
-	
+
+	@Override
+	public void deleteProduct(int productId) {
+		boolean deleted = productDao.deleteProduct(productId);
+
+		if (deleted)
+			System.out.println("Product deleted successfully!");
+		else
+			System.out.println("Product not found or deletion failed.");
+	}
 
 }
