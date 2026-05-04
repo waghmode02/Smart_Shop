@@ -3,6 +3,7 @@ package dao;
 import java.util.List;
 
 import model.Product;
+import model.User;
 
 public interface ProductDao {
 
@@ -10,6 +11,9 @@ public interface ProductDao {
 	
 	int getProductStock(int id);
 	
-//	Once users feature is enabled, uncomment below changes
-//	List<Users> getRegisteredUsers();
+	List<User> getRegisteredUsers();
+	
+	List<Product> getPurchaseHistory(String username);
+	
+	void updateProductDetails(int id, String name, String description, double price, int quantity);
 }

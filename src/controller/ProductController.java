@@ -3,6 +3,7 @@ package controller;
 import java.util.List;
 import java.util.Scanner;
 import model.Product;
+import model.User;
 import service.impl.ProductServiceImpl;
 
 public class ProductController {
@@ -45,13 +46,82 @@ public class ProductController {
 	}
 
 	public void viewRegisteredUsers() {
-//		Once users feature is enabled, uncomment below changes
-//		List<Users> users = productService.viewRegisteredUsers();
-//
-//		for (Users user : users) {
-//			System.out.println("Registered Users are: " + user);
-//		}
+		
+		List<User> users = productService.viewRegisteredUsers();
+		
+		if (users.isEmpty()) {
+	        System.out.println("No registered users found.");
+	        return;
+	    }
+
+		for (User user : users) {
+			System.out.println("Registered Users are: " + user);
+		}
 
 	}
+	
+	public void viewPurchaseHistory() {
+		System.out.println("Enter the username: ");
+		String username = scanner.next();
+		
+		List<Product> products = productService.viewPurchaseHistory(username);
+		
+		if (products.isEmpty()) {
+	        System.out.println("No purchase history found.");
+	    } else {
+	        System.out.println("Purchase History for this user: ");
+	        for (Product product : products) {
+	            System.out.println(product);
+	        }
+	    }
+	}
+	
+	public void updateProductDetails() {
+		System.out.println("Enter the product ID to update: ");
+		int id = scanner.nextInt();
+		
+		String name = null;
+	    String description = null;
+	    double price = -1;
+	    int quantity = -1;
+
+		    System.out.println("What do you want to update?");
+		    System.out.println("1. Name");
+		    System.out.println("2. Description");
+		    System.out.println("3. Price");
+		    System.out.println("4. Quantity");
+
+		    int choice = scanner.nextInt();
+		    scanner.nextLine();
+
+		    switch (choice) {
+
+		    case 1:
+		        System.out.println("Enter new name:");
+		        name = scanner.nextLine();
+		        break;
+
+		    case 2:
+		        System.out.println("Enter new description:");
+		        description = scanner.nextLine();
+		        break;
+
+		    case 3:
+		        System.out.println("Enter new price:");
+		        price = scanner.nextDouble();
+		        break;
+
+		    case 4:
+		        System.out.println("Enter new quantity:");
+		        quantity = scanner.nextInt();
+		        break;
+
+		    default:
+		        System.out.println("Invalid choice");
+		        return;
+		    }
+
+		    productService.updateProductDetails(id, name, description, price, quantity);
+		}
 
 }

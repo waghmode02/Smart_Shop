@@ -3,6 +3,7 @@ package service;
 import java.util.List;
 
 import model.Product;
+import model.User;
 
 public interface ProductService {
 
@@ -10,7 +11,10 @@ public interface ProductService {
 	
 	int viewProductStock(int id);
 	
-//	Once users feature is enabled, uncomment below changes
-//	List<Users> viewRegisteredUsers();
-
+	List<User> viewRegisteredUsers();
+	
+	List<Product> viewPurchaseHistory(String username);
+	
+	void updateProductDetails(int id, String name, String description, double price, int quantity);
+	
 }

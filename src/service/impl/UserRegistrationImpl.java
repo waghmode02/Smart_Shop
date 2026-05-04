@@ -18,10 +18,10 @@ public class UserRegistrationImpl implements UserRegistration {
         UserValidationImpl validator = new UserValidationImpl();
 
         System.out.println("Enter First Name");
-        String fname = scanner.nextLine();   
+        String first_name = scanner.nextLine();   
 
         System.out.println("Enter Last Name");
-        String lname = scanner.nextLine();
+        String last_name = scanner.nextLine();
 
         System.out.println("Enter Username");
         String username = scanner.nextLine();
@@ -67,18 +67,27 @@ public class UserRegistrationImpl implements UserRegistration {
             System.out.println("Mobile number already registered");
             return;
         }
+        
+        System.out.println("Enter Role (admin/user): ");
+        String role = scanner.nextLine().toLowerCase();
+
+        if (!role.equals("admin") && !role.equals("user")) {
+            System.out.println("Invalid role! Defaulting to 'user'");
+            role = "user";
+        }
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(
-                     "INSERT INTO users (fname, lname, username, password, city, email, mobile) VALUES (?,?,?,?,?,?,?)")) {
+                     "INSERT INTO users (first_name, last_name, username, password, city, email, mobile, role) VALUES (?,?,?,?,?,?,?,?)")) {
 
-            ps.setString(1, fname);
-            ps.setString(2, lname);
+            ps.setString(1, first_name);
+            ps.setString(2, last_name);
             ps.setString(3, username);
             ps.setString(4, password);
             ps.setString(5, city);
             ps.setString(6, email);
             ps.setString(7, mobile);
+            ps.setString(8, role);
 
             int res = ps.executeUpdate();
 
@@ -92,6 +101,6 @@ public class UserRegistrationImpl implements UserRegistration {
             System.out.println("Error: " + e.getMessage());
         }
 
-        scanner.close(); 
+        //scanner.close(); 
     }
 }

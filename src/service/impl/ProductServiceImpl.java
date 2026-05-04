@@ -4,6 +4,7 @@ import java.util.List;
 import dao.ProductDao;
 import dao.impl.ProductDaoImpl;
 import model.Product;
+import model.User;
 import service.ProductService;
 
 public class ProductServiceImpl implements ProductService {
@@ -31,13 +32,23 @@ public class ProductServiceImpl implements ProductService {
 		return productDao.getProductStock(id);
 
 	}
+
+	@Override
+	public List<User> viewRegisteredUsers() {
+
+		return productDao.getRegisteredUsers();
+		
+	}
+
+	@Override
+	public List<Product> viewPurchaseHistory(String username) {
+		return productDao.getPurchaseHistory(username);
+	}
+
+	@Override
+	public void updateProductDetails(int id, String name, String description, double price, int quantity) {
+		productDao.updateProductDetails(id, name, description, price, quantity);
+	}
 	
-//	Once users feature is enabled, uncomment below changes
-//	@Override
-//	public List<Users> viewRegisteredUsers() {
-//
-//		return productDao.getRegisteredUsers();
-//
-//	}
 
 }

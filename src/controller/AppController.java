@@ -19,7 +19,6 @@ public class AppController {
 //			showAdminMenu();
 //		} else {
 //			System.out.println("Welcome User!");
-//			showUserMenu();
 //		}
 
 		MenuHandler menuHandler = new MenuHandler();
@@ -69,7 +68,9 @@ public class AppController {
 			System.out.println("1. Add Product");
 			System.out.println("2. View Product Stock");
 			System.out.println("3. View Registered Users");
-			System.out.println("4. Go Back");
+			System.out.println("4. View Purchase History");
+			System.out.println("5. Update Product Details");
+			System.out.println("6. Go Back");
 			System.out.println("Enter your choice: ");
 
 			int choice = scanner.nextInt();
@@ -88,6 +89,13 @@ public class AppController {
 				break;
 
 			case 4:
+				productController.viewPurchaseHistory();
+				break;
+				
+			case 5:
+				productController.updateProductDetails();
+				
+			case 6:
 				return;
 
 			default:
