@@ -16,93 +16,84 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 
 	@Override
 	public void viewAllProduct() {
-		// TODO Auto-generated method stub
 		System.out.println("Displaying all products in sorted order:");
 		try {
-<<<<<<< HEAD
-			Connection conn=DBConnection.getConnection();
-			String query="select * from products";
-			PreparedStatement ps=conn.prepareStatement(query);
-			ResultSet rs=ps.executeQuery();
-			System.out.println("Product ID | Name | Description | Price | Quantity");
-			while (rs.next()) {
-				System.out.println(rs.getInt("product_id")+" |"+rs.getString("product_name")+" | "+
-			rs.getString("description")+" |"+rs.getBigDecimal("price")+" |"+rs.getInt("quantity"));
-=======
 			Connection conn = DBConnection.getConnection();
 			String query = "select * from products";
 			PreparedStatement ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			System.out.println("Product ID | Name | Description | Price | Quantity");
+
 			while (rs.next()) {
-				System.out.println(rs.getInt("product_id") + " |" + rs.getString("product_name") + " | "
-						+ rs.getString("description") + " |" + rs.getBigDecimal("price") + " |"
-						+ rs.getInt("quantity"));
->>>>>>> 9d811bd3c8217ce15ebbbfac488fccb87812d48e
+				System.out.println(
+					rs.getInt("product_id") + " |" +
+					rs.getString("product_name") + " | " +
+					rs.getString("description") + " |" +
+					rs.getBigDecimal("price") + " |" +
+					rs.getInt("quantity")
+				);
 			}
+
 			System.out.println("---------------------------------------------------------");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
 	public void searchProductsbyName() {
-		// TODO Auto-generated method stub
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter product name to search >>");
 		String keyword = scanner.next();
+
 		try {
-<<<<<<< HEAD
-			boolean found=false;
-			Connection conn=DBConnection.getConnection();
-			String query="select * from products where product_name like ?";
-=======
 			boolean found = false;
+
 			Connection conn = DBConnection.getConnection();
-			String query = "select * from product where product_name like ?";
->>>>>>> 9d811bd3c8217ce15ebbbfac488fccb87812d48e
+			String query = "select * from products where product_name like ?";
 			PreparedStatement ps = conn.prepareStatement(query);
+
 			ps.setString(1, "%" + keyword + "%");
+
 			ResultSet rs = ps.executeQuery();
+
 			System.out.println("Product ID | Name | Description | Price | Quantity");
+
 			while (rs.next()) {
-<<<<<<< HEAD
-				found=true;
-				System.out.println(rs.getInt("product_id")+" |"+rs.getString("product_name")+" | "+
-			rs.getString("description")+" |"+rs.getBigDecimal("price")+" |"+rs.getInt("quantity"));
-=======
 				found = true;
-				System.out.println(rs.getInt("product_id") + " |" + rs.getString("product_name") + " | "
-						+ rs.getString("descriptions") + " |" + rs.getBigDecimal("price") + " |"
-						+ rs.getInt("quntity"));
->>>>>>> 9d811bd3c8217ce15ebbbfac488fccb87812d48e
+
+				System.out.println(
+					rs.getInt("product_id") + " |" +
+					rs.getString("product_name") + " | " +
+					rs.getString("description") + " |" +
+					rs.getBigDecimal("price") + " |" +
+					rs.getInt("quantity")
+				);
 			}
+
 			if (!found) {
 				System.out.println("products are not found..!");
 			}
+
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
 	public void viewPurchaseHistory() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void viewAllCartItem() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void addToCart() {
+
 		Scanner scanner = new Scanner(System.in);
 
 		System.out.println("Enter the user ID: ");
@@ -118,8 +109,8 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 
 		try {
 			con = DBConnection.getConnection();
-			PreparedStatement ps = con.prepareStatement(QUANTITY_CHECK_QUERY);
 
+			PreparedStatement ps = con.prepareStatement(QUANTITY_CHECK_QUERY);
 			ps.setInt(1, productId);
 
 			ResultSet rs = ps.executeQuery();
@@ -142,6 +133,7 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 			ps1.setInt(3, quantity);
 
 			int purchaseResult = ps1.executeUpdate();
+
 			PreparedStatement ps2 = con.prepareStatement(UPDATE_QUERY);
 			ps2.setInt(1, quantity);
 			ps2.setInt(2, productId);
@@ -157,7 +149,5 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
-
 }
