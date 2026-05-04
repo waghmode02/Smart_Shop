@@ -13,7 +13,7 @@ public class AppController {
 	private ProductBrowsingImpl productBrowsingImpl = new ProductBrowsingImpl();
 
 	public void startApp() {
-		showAdminMenu();
+		//showAdminMenu();
 
 //		if ("ADMIN".equalsIgnoreCase(user.getRole())) {
 //			System.out.println("Welcome Admin!");

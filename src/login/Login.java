@@ -30,7 +30,7 @@ public class Login {
 			// TODO: handle exception
 			System.out.println("Error: "+e.getMessage());
 		}
-		scanner.close();
+		//scanner.close();
 		
 	}
 }
