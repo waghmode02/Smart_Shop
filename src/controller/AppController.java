@@ -10,7 +10,8 @@ public class AppController {
 
 	private final Scanner scanner = new Scanner(System.in);
 	private ProductController productController = new ProductController();
-	private ProductBrowsingImpl productBrowsingImpl=new ProductBrowsingImpl();
+	private ProductBrowsingImpl productBrowsingImpl = new ProductBrowsingImpl();
+
 	public void startApp() {
 		showAdminMenu();
 
@@ -23,15 +24,15 @@ public class AppController {
 
 		MenuHandler menuHandler = new MenuHandler();
 		menuHandler.menu();
-		
+
 		Scanner scanner = new Scanner(System.in);
-		boolean flag=false;
-		while(!flag) {
+		boolean flag = false;
+		while (!flag) {
 			System.out.println("Enter your choice >>");
 			int choice = scanner.nextInt();
 			switch (choice) {
 			case 1:
-				UserRegistrationImpl userRegistrationImpl=new UserRegistrationImpl();
+				UserRegistrationImpl userRegistrationImpl = new UserRegistrationImpl();
 				userRegistrationImpl.newUserRegistration();
 				break;
 			case 2:
@@ -54,7 +55,7 @@ public class AppController {
 				break;
 			case 8:
 				System.out.println("Thank you..!");
-				flag=true;
+				flag = true;
 				break;
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + choice);
@@ -70,7 +71,8 @@ public class AppController {
 			System.out.println("3. View Registered Users");
 			System.out.println("4. View Purchase History");
 			System.out.println("5. Update Product Details");
-			System.out.println("6. Go Back");
+			System.out.println("6. Delete the product from inventory");
+			System.out.println("7. Go Back");
 			System.out.println("Enter your choice: ");
 
 			int choice = scanner.nextInt();
@@ -91,11 +93,16 @@ public class AppController {
 			case 4:
 				productController.viewPurchaseHistory();
 				break;
-				
+
 			case 5:
 				productController.updateProductDetails();
-				
+				break;
+
 			case 6:
+				productController.deleteProduct();
+				break;
+
+			case 7:
 				return;
 
 			default:

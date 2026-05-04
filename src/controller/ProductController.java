@@ -123,5 +123,13 @@ public class ProductController {
 
 		    productService.updateProductDetails(id, name, description, price, quantity);
 		}
+	
+	public void deleteProduct() {
+		System.out.println("Enter the product ID: ");
+		int id= scanner.nextInt();
+		scanner.nextLine();
+		
+		productService.deleteProduct(id);
+	}
 
 }
