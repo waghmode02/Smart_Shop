@@ -100,7 +100,5 @@ public class UserRegistrationImpl implements UserRegistration {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
-
-        //scanner.close(); 
     }
 }

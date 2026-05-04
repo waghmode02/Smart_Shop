@@ -15,13 +15,13 @@ public class ProductBrowsingImpl implements ProductBrowsing{
 		System.out.println("Displaying all products in sorted order:");
 		try {
 			Connection conn=DBConnection.getConnection();
-			String query="select * from product";
+			String query="select * from products";
 			PreparedStatement ps=conn.prepareStatement(query);
 			ResultSet rs=ps.executeQuery();
 			System.out.println("Product ID | Name | Description | Price | Quantity");
 			while (rs.next()) {
 				System.out.println(rs.getInt("product_id")+" |"+rs.getString("product_name")+" | "+
-			rs.getString("descriptions")+" |"+rs.getBigDecimal("price")+" |"+rs.getInt("quntity"));
+			rs.getString("description")+" |"+rs.getBigDecimal("price")+" |"+rs.getInt("quantity"));
 			}
 			System.out.println("---------------------------------------------------------");
 		} catch (Exception e) {
@@ -39,7 +39,7 @@ public class ProductBrowsingImpl implements ProductBrowsing{
 		try {
 			boolean found=false;
 			Connection conn=DBConnection.getConnection();
-			String query="select * from product where product_name like ?";
+			String query="select * from products where product_name like ?";
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, "%" + keyword+ "%");
 			ResultSet rs = ps.executeQuery();
@@ -47,7 +47,7 @@ public class ProductBrowsingImpl implements ProductBrowsing{
 			while (rs.next()) {
 				found=true;
 				System.out.println(rs.getInt("product_id")+" |"+rs.getString("product_name")+" | "+
-			rs.getString("descriptions")+" |"+rs.getBigDecimal("price")+" |"+rs.getInt("quntity"));
+			rs.getString("description")+" |"+rs.getBigDecimal("price")+" |"+rs.getInt("quantity"));
 			}
 			if(!found) {
 				System.out.println("products are not found..!");

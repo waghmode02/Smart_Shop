@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.Scanner;
+
 public class MenuHandler {
 	public void menu() {
 		System.out.println("Welcome to E-Commerce Console Application");
@@ -13,5 +15,5 @@ public class MenuHandler {
 		System.out.println("7. View Purchase History");
 		System.out.println("8. Exit");
 	}
-
+	
 }
