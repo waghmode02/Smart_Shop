@@ -104,6 +104,7 @@ public class AppController {
 			try {
 				System.out.print("Enter your choice: ");
 				 choice = scanner.nextInt();
+				 scanner.nextLine();
 				 if(choice<1 || choice >7) {
 					 throw new ErrorResponce("Please select choice between 1 and 7");
 				 }

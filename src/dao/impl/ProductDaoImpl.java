@@ -151,9 +151,9 @@ public class ProductDaoImpl implements ProductDao {
 				ps.setString(1, name);
 			else if (description != null)
 				ps.setString(1, description);
-			else if (price < 0)
+			else if (price != -1)
 				ps.setDouble(1, price);
-			else if (quantity < 0)
+			else if (quantity != -1)
 				ps.setInt(1, quantity);
 
 			ps.setInt(2, id);

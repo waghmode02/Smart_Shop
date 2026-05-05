@@ -21,9 +21,11 @@ public class ProductController {
 
 		System.out.println("Enter the product price: ");
 		double price = scanner.nextDouble();
+		scanner.nextLine();
 
 		System.out.println("Enter the product quantity: ");
 		int quantity = scanner.nextInt();
+		scanner.nextLine();
 
 		Product product = new Product(name, description, price, quantity);
 
@@ -34,6 +36,7 @@ public class ProductController {
 
 		System.out.println("Enter the product id: ");
 		int id = scanner.nextInt();
+		scanner.nextLine();
 
 		int stock = productService.viewProductStock(id);
 
@@ -62,7 +65,7 @@ public class ProductController {
 	
 	public void viewPurchaseHistory() {
 		System.out.println("Enter the username: ");
-		String username = scanner.next();
+		String username = scanner.nextLine();
 		
 		List<Product> products = productService.viewPurchaseHistory(username);
 		
@@ -79,6 +82,7 @@ public class ProductController {
 	public void updateProductDetails() {
 		System.out.println("Enter the product ID to update: ");
 		int id = scanner.nextInt();
+		scanner.nextLine();
 		
 		String name = null;
 	    String description = null;
@@ -109,11 +113,13 @@ public class ProductController {
 		    case 3:
 		        System.out.println("Enter new price:");
 		        price = scanner.nextDouble();
+		        scanner.nextLine();
 		        break;
 
 		    case 4:
 		        System.out.println("Enter new quantity:");
 		        quantity = scanner.nextInt();
+		        scanner.nextLine();
 		        break;
 
 		    default:
