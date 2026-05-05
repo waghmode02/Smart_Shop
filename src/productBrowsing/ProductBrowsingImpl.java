@@ -11,7 +11,7 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 
 	public static final String QUANTITY_CHECK_QUERY = "select quantity from products where product_id = ?";
 	public static final String INSERT_QUERY = "insert into purchases (user_id, product_id, quantity) values (?,?,?)";
-	public static final String UPDATE_QUERY = "update products set quantity = quantity - ? where product_id=?";
+	public static final String UPDATE_QUERY ="update products set quantity = quantity - ? where product_id = ?";
 	public static final String FETCH_CART_ITEMS = "select p.product_name, p.price, pu.quantity " + "from purchases pu "
 			+ "inner join products p on pu.product_id = p.product_id " + "where pu.user_id = ?";
 	private static final String PURCHASE_HISTORY_QUERY = "select products.product_id, products.product_name, products.description, products.price, purchases.quantity "
@@ -122,57 +122,82 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 	@Override
 	public void addToCart() {
 
-		System.out.println("Enter the user ID: ");
-		int userId = scanner.nextInt();
+	    System.out.println("Enter the user ID: ");
+	    int userId = scanner.nextInt();
 
-		System.out.println("Enter the product ID: ");
-		int productId = scanner.nextInt();
+	    System.out.println("Enter the product ID: ");
+	    int productId = scanner.nextInt();
 
-		System.out.println("Enter Quantity: ");
-		int quantity = scanner.nextInt();
+	    System.out.println("Enter Quantity: ");
+	    int quantity = scanner.nextInt();
 
-		try {
-			Connection con = DBConnection.getConnection();
+	    if (quantity <= 0) {
+	        System.out.println("Quantity must be greater than 0!");
+	        return;
+	    }
 
-			PreparedStatement ps = con.prepareStatement(QUANTITY_CHECK_QUERY);
-			ps.setInt(1, productId);
+	    Connection con = null;
 
-			ResultSet rs = ps.executeQuery();
+	    try {
+	        con = DBConnection.getConnection();
+	        con.setAutoCommit(false);
+	        PreparedStatement ps = con.prepareStatement(QUANTITY_CHECK_QUERY);
+	        ps.setInt(1, productId);
+	        ResultSet rs = ps.executeQuery();
 
-			if (!rs.next()) {
-				System.out.println("Product not found!");
-				return;
-			}
+	        if (!rs.next()) {
+	            System.out.println("Product not found!");
+	            con.rollback();
+	            return;
+	        }
 
-			int availableQuantity = rs.getInt("quantity");
+	        int availableQuantity = rs.getInt("quantity");
 
-			if (quantity > availableQuantity) {
-				System.out.println("Stock Unavailable!");
-				return;
-			}
+	        if (quantity > availableQuantity) {
+	            System.out.println("Stock Unavailable!");
+	            con.rollback();
+	            return;
+	        }
+	        PreparedStatement ps1 = con.prepareStatement(INSERT_QUERY);
+	        ps1.setInt(1, userId);
+	        ps1.setInt(2, productId);
+	        ps1.setInt(3, quantity);
 
-			PreparedStatement ps1 = con.prepareStatement(INSERT_QUERY);
-			ps1.setInt(1, userId);
-			ps1.setInt(2, productId);
-			ps1.setInt(3, quantity);
+	        int purchaseResult = ps1.executeUpdate();
+	        PreparedStatement ps2 = con.prepareStatement(UPDATE_QUERY);
+	        ps2.setInt(1, quantity);
+	        ps2.setInt(2, productId);
 
-			int purchaseResult = ps1.executeUpdate();
+	        int updateResult = ps2.executeUpdate();
 
-			PreparedStatement ps2 = con.prepareStatement(UPDATE_QUERY);
-			ps2.setInt(1, quantity);
-			ps2.setInt(2, productId);
+	        if (purchaseResult > 0 && updateResult > 0) {
+	            con.commit();
+	            System.out.println("Product purchased successfully!");
+	        } else {
+	            con.rollback();
+	            System.out.println("Failed to add to cart!");
+	        }
 
-			int updateResult = ps2.executeUpdate();
+	    } catch (SQLException e) {
+	        try {
+	            if (con != null) {
+	                con.rollback(); 
+	            }
+	        } catch (SQLException ex) {
+	            ex.printStackTrace();
+	        }
+	        e.printStackTrace();
 
-			if (purchaseResult > 0 && updateResult > 0) {
-				System.out.println("Product added to cart successfully!");
-			} else {
-				System.out.println("Failed to add to cart!");
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	    } finally {
+	        try {
+	            if (con != null) {
+	                con.setAutoCommit(true);
+	                con.close();
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
 	}
 
 	@Override
