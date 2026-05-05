@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import util.DBConnection;
 
@@ -25,7 +26,7 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 		System.out.println("Displaying all products:");
 		try {
 			Connection conn = DBConnection.getConnection();
-			String query = "select * from products";
+			String query = "select * from productss order by product_name";
 			PreparedStatement ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 
@@ -40,7 +41,7 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 			System.out.println("---------------------------------------------------------");
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Error: "+ e.getMessage());
 		}
 	}
 
@@ -57,7 +58,10 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 			ps.setString(1, "%" + keyword + "%");
 
 			ResultSet rs = ps.executeQuery();
-
+			if(!rs.next()) {
+				System.out.println("Products not found..!");
+				return;
+			}
 			System.out.println("Product ID | Name | Description | Price | Quantity");
 
 			while (rs.next()) {
@@ -67,22 +71,24 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 						+ rs.getInt("quantity"));
 			}
 
-			if (!found) {
-				System.out.println("Products not found!");
-			}
-
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Error: "+ e.getMessage());
 		}
 	}
 
 	@Override
 	public void viewPurchaseHistory() {
 		Connection con = null;
+		int id=0;
+		try {
+			System.out.println("Enter the user id: ");
+			 id = scanner.nextInt();
 
-		System.out.println("Enter the user id: ");
-		int id = scanner.nextInt();
-
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Please enter correct user id");
+			return ;
+		}
 		System.out.println("Fetching your complete purchase history...");
 		System.out.println("Date | Product Name | Quantity | Price | Total");
 		System.out.println("----------------------------------------------");
@@ -114,27 +120,34 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("Error: "+ e.getMessage());
 		}
 
 	}
 
 	@Override
 	public void addToCart() {
+		int userId=0;
+		int productId=0;
+		int quantity=0;
+	    try {
+	    	System.out.println("Enter the user ID: ");
+		    userId = scanner.nextInt();
 
-	    System.out.println("Enter the user ID: ");
-	    int userId = scanner.nextInt();
+		    System.out.println("Enter the product ID: ");
+		    productId = scanner.nextInt();
 
-	    System.out.println("Enter the product ID: ");
-	    int productId = scanner.nextInt();
+		    System.out.println("Enter Quantity: ");
+		    quantity = scanner.nextInt();
 
-	    System.out.println("Enter Quantity: ");
-	    int quantity = scanner.nextInt();
-
-	    if (quantity <= 0) {
-	        System.out.println("Quantity must be greater than 0!");
-	        return;
-	    }
+		    if (quantity <= 0) {
+		        System.out.println("Quantity must be greater than 0!");
+		        return;
+		    }
+		} catch (InputMismatchException e) {
+			// TODO: handle exception
+			System.out.println("Please enter correct details");
+		}
 
 	    Connection con = null;
 
@@ -184,7 +197,7 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 	                con.rollback(); 
 	            }
 	        } catch (SQLException ex) {
-	            ex.printStackTrace();
+	        	 System.out.println("Error:"+e.getMessage());
 	        }
 	        e.printStackTrace();
 
@@ -195,8 +208,9 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 	                con.close();
 	            }
 	        } catch (SQLException e) {
-	            e.printStackTrace();
+	           System.out.println("Error:"+e.getMessage());
 	        }
+	        scanner.next();
 	    }
 	}
 
@@ -204,9 +218,15 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 	public void viewAllCartItem() {
 
 		System.out.println("Fetching your cart/purchased items...");
-
-		System.out.println("Enter your user ID: ");
-		int userId = scanner.nextInt();
+		int userId =0;
+		try {
+			System.out.println("Enter your user ID: ");
+			userId = scanner.nextInt();
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("please enter correct user ID");
+			return;
+		}
 
 		boolean found = false;
 		double totalAmount = 0;
@@ -243,7 +263,7 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Error:"+e.getMessage());
 		}
 	}
 }
