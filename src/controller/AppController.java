@@ -10,12 +10,12 @@ import service.impl.UserRegistrationImpl;
 
 public class AppController {
 
-	private final Scanner scanner = new Scanner(System.in);
+	// private final Scanner scanner = new Scanner(System.in);
 	private ProductController productController = new ProductController();
 	private ProductBrowsingImpl productBrowsingImpl = new ProductBrowsingImpl();
 
 	public void startApp() {
-
+		Scanner scanner = new Scanner(System.in);
 		MenuHandler menuHandler = new MenuHandler();
 
 		boolean flag = false;
@@ -23,18 +23,17 @@ public class AppController {
 		while (!flag) {
 
 			menuHandler.menu();
-			int choice=0;
+			int choice = 0;
 			try {
 				System.out.println("Enter your choice >>");
-				 choice = scanner.nextInt();
-				if(choice<1 || choice>8) {
+				choice = scanner.nextInt();
+				if (choice < 1 || choice > 8) {
 					throw new ErrorResponce("Please select choice between 1 and 8");
 				}
-			}catch (InputMismatchException e){
+			} catch (InputMismatchException e) {
 				System.out.println("Please enter numbers only..!");
-			}
-			catch (Exception e) {
-				 System.out.println(e.getMessage());
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
 			}
 
 			switch (choice) {
@@ -89,7 +88,7 @@ public class AppController {
 	}
 
 	private void showAdminMenu() {
-
+		Scanner scanner = new Scanner(System.in);
 		while (true) {
 			System.out.println("--------------------------");
 			System.out.println("\n------ ADMIN MENU ------");
@@ -102,21 +101,23 @@ public class AppController {
 			System.out.println("6. Delete the product from inventory");
 			System.out.println("7. Go Back");
 			System.out.println("--------------------------");
-			int choice=0;
+			int choice;
 			try {
 				System.out.print("Enter your choice: ");
-				 choice = scanner.nextInt();
-				 scanner.nextLine();
-				 if(choice<1 || choice >7) {
-					 throw new ErrorResponce("Please select choice between 1 and 7");
-				 }
-			} 
-			catch(InputMismatchException ex) {
+				choice = scanner.nextInt();
+				scanner.nextLine();
+
+				if (choice < 1 || choice > 7) {
+					throw new ErrorResponce("Please select choice between 1 and 7");
+				}
+			} catch (InputMismatchException ex) {
 				System.out.println("Please enter numbers only..!");
-			}
-			catch (Exception e) {
+				scanner.nextLine();
+				continue;
+			} catch (Exception e) {
 				// TODO: handle exception
 				System.out.println(e.getMessage());
+				continue;
 			}
 
 			switch (choice) {
@@ -144,7 +145,7 @@ public class AppController {
 			case 6:
 				productController.deleteProduct();
 				break;
-			
+
 			case 7:
 				return;
 
