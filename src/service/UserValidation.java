@@ -13,4 +13,5 @@ public interface UserValidation {
     boolean isValidEmail(String email);
 
     boolean isValidUsername(String username);
+    boolean isNameAndLastName(String name);
 }

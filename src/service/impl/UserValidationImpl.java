@@ -68,4 +68,10 @@ public class UserValidationImpl implements UserValidation {
     public boolean isValidUsername(String username) {
         return username != null && username.matches("^[a-zA-Z0-9_]{4,15}$");
     }
+
+	@Override
+	public boolean isNameAndLastName(String name) {
+		// TODO Auto-generated method stub
+		return name != null && name.matches("^[A-Za-z]+$");
+	}
 }

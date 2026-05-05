@@ -18,13 +18,21 @@ public class UserRegistrationImpl implements UserRegistration {
         UserValidationImpl validator = new UserValidationImpl();
 
         System.out.println("Enter First Name");
-        String first_name = scanner.nextLine();   
+        String first_name = scanner.next();  
+        if(!validator.isNameAndLastName(first_name)) {
+        	System.out.println("Please enter character only");
+        	return;
+        }
 
         System.out.println("Enter Last Name");
-        String last_name = scanner.nextLine();
+        String last_name = scanner.next();
+        if(!validator.isNameAndLastName(last_name)) {
+        	System.out.println("Please enter character only");
+        	return;
+        }
 
         System.out.println("Enter Username");
-        String username = scanner.nextLine();
+        String username = scanner.next();
 
         if (!validator.isValidUsername(username)) {
             System.out.println("Invalid Username");
@@ -37,13 +45,13 @@ public class UserRegistrationImpl implements UserRegistration {
         }
 
         System.out.println("Enter Password");
-        String password = scanner.nextLine();
+        String password = scanner.next();
 
         System.out.println("Enter City");
-        String city = scanner.nextLine();
+        String city = scanner.next();
 
         System.out.println("Enter Email");
-        String email = scanner.nextLine();
+        String email = scanner.next();
 
         if (!validator.isValidEmail(email)) {
             System.out.println("Invalid Email Format");
