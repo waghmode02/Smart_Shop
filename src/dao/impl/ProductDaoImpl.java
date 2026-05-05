@@ -17,8 +17,8 @@ public class ProductDaoImpl implements ProductDao {
 	private static final String SELECT_QUERY = "select quantity from products where product_id = ?";
 	private static final String USERS_QUERY = "select user_id, first_name, last_name, username, city, email, mobile, role from users";
 	private static final String PURCHASE_HISTORY_QUERY = "select products.product_id, products.product_name, products.description, products.price, purchases.quantity "
-			+ "FROM purchases " + "INNER JOIN users ON purchases.user_id = users.user_id "
-			+ "INNER JOIN products ON purchases.product_id = products.product_id " + "WHERE users.username = ?";
+			+ "from purchases " + "inner join users on purchases.user_id = users.user_id "
+			+ "inner join products ON purchases.product_id = products.product_id " + "where users.username = ?";
 
 	private static final String DELETE_PRODUCT = "delete from products where product_id = ?";
 	private static final String DELETE_PURCHASES = "delete from purchases where product_id = ?";

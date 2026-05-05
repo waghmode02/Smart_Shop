@@ -4,18 +4,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-import model.Cart;
 import util.DBConnection;
 
 public class ProductBrowsingImpl implements ProductBrowsing {
 
-	public static final String QUANTITY_CHECK_QUERY = "SELECT quantity FROM products WHERE product_id = ?";
+	public static final String QUANTITY_CHECK_QUERY = "select quantity from products where product_id = ?";
 	public static final String INSERT_QUERY = "insert into purchases (user_id, product_id, quantity) values (?,?,?)";
 	public static final String UPDATE_QUERY = "update products set quantity = quantity - ? where product_id=?";
-	private static List<Cart> cartList = new ArrayList<>();
+	public static final String FETCH_CART_ITEMS = "select p.product_name, p.price, pu.quantity " + "from purchases pu "
+			+ "inner join products p on pu.product_id = p.product_id " + "where pu.user_id = ?";
+	private static final String PURCHASE_HISTORY_QUERY = "select products.product_id, products.product_name, products.description, products.price, purchases.quantity "
+			+ "from purchases " + "inner join users on purchases.user_id = users.user_id "
+			+ "inner join products ON purchases.product_id = products.product_id " + "where users.user_id = ?";
+
 	private static final Scanner scanner = new Scanner(System.in);
 
 	@Override
@@ -76,7 +78,45 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 
 	@Override
 	public void viewPurchaseHistory() {
-		// TODO
+		Connection con = null;
+
+		System.out.println("Enter the user id: ");
+		int id = scanner.nextInt();
+
+		System.out.println("Fetching your complete purchase history...");
+		System.out.println("Date | Product Name | Quantity | Price | Total");
+		System.out.println("----------------------------------------------");
+
+		try {
+			con = DBConnection.getConnection();
+			PreparedStatement ps = con.prepareStatement(PURCHASE_HISTORY_QUERY);
+
+			ps.setInt(1, id);
+
+			ResultSet rs = ps.executeQuery();
+
+			boolean found = false;
+
+			while (rs.next()) {
+
+				found = true;
+
+				String name = rs.getString("product_name");
+				int quantity = rs.getInt("quantity");
+				double price = rs.getDouble("price");
+
+				double total = quantity * price;
+
+				System.out.println("Date" + name + " | " + quantity + " | " + price + " | " + total);
+
+				if (!found) {
+					System.out.println("No purchase history found!");
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
@@ -94,7 +134,6 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 		try {
 			Connection con = DBConnection.getConnection();
 
-			// Check stock
 			PreparedStatement ps = con.prepareStatement(QUANTITY_CHECK_QUERY);
 			ps.setInt(1, productId);
 
@@ -112,30 +151,24 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 				return;
 			}
 
-//            // Insert purchase
-//            PreparedStatement ps1 = con.prepareStatement(INSERT_QUERY);
-//            ps1.setInt(1, userId);
-//            ps1.setInt(2, productId);
-//            ps1.setInt(3, quantity);
-//
-//            int purchaseResult = ps1.executeUpdate();
-//
-//            // Update stock
-//            PreparedStatement ps2 = con.prepareStatement(UPDATE_QUERY);
-//            ps2.setInt(1, quantity);
-//            ps2.setInt(2, productId);
-//
-//            int updateResult = ps2.executeUpdate();
-//
-//            if (purchaseResult > 0 && updateResult > 0) {
-//                System.out.println("Product added to cart successfully!");
-//            } else {
-//                System.out.println("Failed to add to cart!");
-//            }
+			PreparedStatement ps1 = con.prepareStatement(INSERT_QUERY);
+			ps1.setInt(1, userId);
+			ps1.setInt(2, productId);
+			ps1.setInt(3, quantity);
 
-			cartList.add(new Cart(userId, productId, quantity));
+			int purchaseResult = ps1.executeUpdate();
 
-			System.out.println("Product added to cart successfully!");
+			PreparedStatement ps2 = con.prepareStatement(UPDATE_QUERY);
+			ps2.setInt(1, quantity);
+			ps2.setInt(2, productId);
+
+			int updateResult = ps2.executeUpdate();
+
+			if (purchaseResult > 0 && updateResult > 0) {
+				System.out.println("Product added to cart successfully!");
+			} else {
+				System.out.println("Failed to add to cart!");
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -145,30 +178,47 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 	@Override
 	public void viewAllCartItem() {
 
+		System.out.println("Fetching your cart/purchased items...");
+
 		System.out.println("Enter your user ID: ");
 		int userId = scanner.nextInt();
 
-		if (cartList.isEmpty()) {
-			System.out.println("Cart is empty!");
-			return;
-		}
-
 		boolean found = false;
+		double totalAmount = 0;
 
-		System.out.println("Product ID | Quantity");
+		System.out.println("Product Name | Quantity | Price | Subtotal");
+		System.out.println("-------------------------------------------");
 
-		for (Cart item : cartList) {
+		try {
+			Connection con = DBConnection.getConnection();
+			PreparedStatement ps = con.prepareStatement(FETCH_CART_ITEMS);
 
-			if (item.getUserId() == userId) {
+			ps.setInt(1, userId);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
 				found = true;
 
-				System.out.println(item.getProductId() + " | " + item.getQuantity());
-			}
-		}
+				String name = rs.getString("product_name");
+				double price = rs.getDouble("price");
+				int quantity = rs.getInt("quantity");
 
-		if (!found) {
-			System.out.println("No items in your cart!");
+				double subtotal = price * quantity;
+				totalAmount += subtotal;
+
+				System.out.println(name + " | " + quantity + " | " + price + " | " + subtotal);
+			}
+
+			if (!found) {
+				System.out.println("No items in your cart!");
+			} else {
+				System.out.println("-------------------------------------------");
+				System.out.println("Total Amount >> " + totalAmount);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
-
 }
