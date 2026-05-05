@@ -16,7 +16,7 @@ public class ProductDaoImpl implements ProductDao {
 	private static final String INSERT_PRODUCT = "insert into products (product_name, description, price, quantity) values (?, ?, ?, ?)";
 	private static final String SELECT_QUERY = "select quantity from products where product_id = ?";
 	private static final String USERS_QUERY = "select user_id, first_name, last_name, username, city, email, mobile, role from users";
-	private static final String PURCHASE_HISTORY_QUERY = "SELECT products.product_id, products.product_name, products.description, products.price, purchases.quantity "
+	private static final String PURCHASE_HISTORY_QUERY = "select products.product_id, products.product_name, products.description, products.price, purchases.quantity "
 			+ "FROM purchases " + "INNER JOIN users ON purchases.user_id = users.user_id "
 			+ "INNER JOIN products ON purchases.product_id = products.product_id " + "WHERE users.username = ?";
 
@@ -130,13 +130,13 @@ public class ProductDaoImpl implements ProductDao {
 		String query = "";
 
 		if (name != null) {
-			query = "UPDATE products SET product_name = ? WHERE product_id = ?";
+			query = "update products set product_name = ? where product_id = ?";
 		} else if (description != null) {
-			query = "UPDATE products SET description = ? WHERE product_id = ?";
+			query = "update products set description = ? where product_id = ?";
 		} else if (price != -1) {
-			query = "UPDATE products SET price = ? WHERE product_id = ?";
+			query = "update products set price = ? where product_id = ?";
 		} else if (quantity != -1) {
-			query = "UPDATE products SET quantity = ? WHERE product_id = ?";
+			query = "update products set quantity = ? where product_id = ?";
 		} else {
 			System.out.println("No valid field to update.");
 			return;

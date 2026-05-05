@@ -8,115 +8,122 @@ import service.impl.UserRegistrationImpl;
 
 public class AppController {
 
-    private final Scanner scanner = new Scanner(System.in);
-    private ProductController productController = new ProductController();
-    private ProductBrowsingImpl productBrowsingImpl = new ProductBrowsingImpl();
+	private final Scanner scanner = new Scanner(System.in);
+	private ProductController productController = new ProductController();
+	private ProductBrowsingImpl productBrowsingImpl = new ProductBrowsingImpl();
 
-    public void startApp() {
+	public void startApp() {
 
-        MenuHandler menuHandler = new MenuHandler();
-        menuHandler.menu();
+		MenuHandler menuHandler = new MenuHandler();
 
-        boolean flag = false;
+		boolean flag = false;
 
-        while (!flag) {
+		while (!flag) {
 
-            System.out.println("Enter your choice >>");
-            int choice = scanner.nextInt();
+			menuHandler.menu();
 
-            switch (choice) {
+			System.out.println("Enter your choice >>");
+			int choice = scanner.nextInt();
+			scanner.nextLine();
 
-            case 1:
-                new UserRegistrationImpl().newUserRegistration();
-                break;
+			switch (choice) {
 
-            case 2:
-                String role = Login.userLogin();
+			case 1:
+				new UserRegistrationImpl().newUserRegistration();
+				break;
 
-                if ("admin".equalsIgnoreCase(role)) {
-                    System.out.println("Welcome Admin!");
-                    showAdminMenu();
-                } else if ("user".equalsIgnoreCase(role)) {
-                    System.out.println("Welcome User!");
-                } else {
-                    System.out.println("Login Failed!");
-                }
-                break;
+			case 2:
+				String role = Login.userLogin();
 
-            case 3:
-                productBrowsingImpl.viewAllProduct();
-                break;
+				if ("admin".equalsIgnoreCase(role)) {
+					System.out.println("Welcome Admin!");
+					showAdminMenu();
+				} else if ("user".equalsIgnoreCase(role)) {
+					System.out.println("Welcome User!");
+				} else {
+					System.out.println("Login Failed!");
+				}
+				break;
 
-            case 4:
-                productBrowsingImpl.searchProductsbyName();
-                break;
+			case 3:
+				productBrowsingImpl.viewAllProduct();
+				break;
 
-            case 5:
-                productBrowsingImpl.addToCart();
-                break;
+			case 4:
+				productBrowsingImpl.searchProductsbyName();
+				break;
 
-            case 6:
-                productBrowsingImpl.viewAllCartItem();
-                break;
+			case 5:
+				productBrowsingImpl.addToCart();
+				break;
 
-            case 7:
-                productBrowsingImpl.viewPurchaseHistory();
-                break;
+			case 6:
+				productBrowsingImpl.viewAllCartItem();
+				break;
 
-            case 8:
-                System.out.println("Thank you..!");
-                flag = true;
-                break;
+			case 7:
+				productBrowsingImpl.viewPurchaseHistory();
+				break;
 
-            default:
-                System.out.println("Invalid Choice!");
-            }
-        }
-    }
+			case 8:
+				System.out.println("Thank you..!");
+				flag = true;
+				break;
 
-    private void showAdminMenu() {
+			default:
+				System.out.println("Invalid Choice!");
+			}
+		}
+	}
 
-        while (true) {
+	private void showAdminMenu() {
 
-            System.out.println("\n------ ADMIN MENU ------");
-            System.out.println("1. Add Product");
-            System.out.println("2. View Product Stock");
-            System.out.println("3. View Registered Users");
-            System.out.println("4. View Purchase History");
-            System.out.println("5. Update Product Details");
-            System.out.println("6. Go Back");
+		while (true) {
 
-            System.out.print("Enter your choice: ");
-            int choice = scanner.nextInt();
+			System.out.println("\n------ ADMIN MENU ------");
+			System.out.println("1. Add Product");
+			System.out.println("2. View Product Stock");
+			System.out.println("3. View Registered Users");
+			System.out.println("4. View Purchase History");
+			System.out.println("5. Update Product Details");
+			System.out.println("6. Delete the product from inventory");
+			System.out.println("7. Go Back");
 
-            switch (choice) {
+			System.out.print("Enter your choice: ");
+			int choice = scanner.nextInt();
 
-            case 1:
-                productController.addProduct();
-                break;
+			switch (choice) {
 
-            case 2:
-                productController.viewProductStock();
-                break;
+			case 1:
+				productController.addProduct();
+				break;
 
-            case 3:
-                productController.viewRegisteredUsers();
-                break;
+			case 2:
+				productController.viewProductStock();
+				break;
 
-            case 4:
-                productController.viewPurchaseHistory();
-                break;
+			case 3:
+				productController.viewRegisteredUsers();
+				break;
 
-            case 5:
-                productController.updateProductDetails();
-                break;
+			case 4:
+				productController.viewPurchaseHistory();
+				break;
 
-            case 6:
-                return;
+			case 5:
+				productController.updateProductDetails();
+				break;
 
-            default:
-                System.out.println("Invalid Choice!");
-            }
-        }
-    }
+			case 6:
+				productController.deleteProduct();
+				break;
+			
+			case 7:
+				return;
+
+			default:
+				System.out.println("Invalid Choice!");
+			}
+		}
+	}
 }

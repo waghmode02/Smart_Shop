@@ -75,6 +75,8 @@ public class UserRegistrationImpl implements UserRegistration {
             System.out.println("Invalid role! Defaulting to 'user'");
             role = "user";
         }
+        
+        
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(

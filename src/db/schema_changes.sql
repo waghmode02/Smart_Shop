@@ -22,4 +22,16 @@ role ENUM('user','admin') DEFAULT 'user',
 createdAt timestamp default current_timestamp 
 );
 
+create table purchases (
+purchase_id int auto_increment  primary key,
+user_id int,
+product_id int,
+quantity int,
+purchase_date timestamp default current_timestamp 
+);
+
 select * from products;
+
+select * from users;
+
+select * from purchases;

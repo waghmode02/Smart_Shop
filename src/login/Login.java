@@ -9,39 +9,38 @@ import util.DBConnection;
 
 public class Login {
 
-    private static final String loginQuery ="SELECT role FROM users WHERE username=? AND password=?";
+	private static final String loginQuery = "SELECT role FROM users WHERE username=? AND password=?";
+	private static final Scanner scanner = new Scanner(System.in);
 
-    public static String userLogin() {
+	public static String userLogin() {
 
-        Scanner scanner = new Scanner(System.in);
+		System.out.print("Enter Username: ");
+		String username = scanner.next();
 
-        System.out.print("Enter Username: ");
-        String username = scanner.next();
+		System.out.print("Enter Password: ");
+		String password = scanner.next();
 
-        System.out.print("Enter Password: ");
-        String password = scanner.next();
+		try {
+			Connection conn = DBConnection.getConnection();
+			PreparedStatement ps = conn.prepareStatement(loginQuery);
 
-        try {
-            Connection conn = DBConnection.getConnection();
-            PreparedStatement ps = conn.prepareStatement(loginQuery);
+			ps.setString(1, username);
+			ps.setString(2, password);
 
-            ps.setString(1, username);
-            ps.setString(2, password);
+			ResultSet rs = ps.executeQuery();
 
-            ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				String role = rs.getString("role");
+				System.out.println("Login Successful!");
+				return role;
+			} else {
+				System.out.println("Invalid Username or Password");
+				return null;
+			}
 
-            if (rs.next()) {
-                String role = rs.getString("role"); 
-                System.out.println("Login Successful!");
-                return role;
-            } else {
-                System.out.println("Invalid Username or Password");
-                return null;
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-            return null;
-        }
-    }
+		} catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
+			return null;
+		}
+	}
 }
