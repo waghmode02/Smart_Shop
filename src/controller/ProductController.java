@@ -33,9 +33,15 @@ public class ProductController {
 	}
 
 	public void viewProductStock() {
-
-		System.out.println("Enter the product id: ");
-		int id = scanner.nextInt();
+		int id=0;
+		try {
+			System.out.println("Enter the product id: ");
+			 id = scanner.nextInt();
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Please enetr correct product id");
+			return;
+		}
 		scanner.nextLine();
 
 		int stock = productService.viewProductStock(id);
@@ -81,8 +87,15 @@ public class ProductController {
 	
 	public void updateProductDetails() {
 		System.out.println("Enter the product ID to update: ");
-		int id = scanner.nextInt();
-		scanner.nextLine();
+		int id =0;
+		try {
+			 id = scanner.nextInt();
+			scanner.nextLine();
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Please enter correct product id");
+			return;
+		}
 		
 		String name = null;
 	    String description = null;
@@ -94,10 +107,15 @@ public class ProductController {
 		    System.out.println("2. Description");
 		    System.out.println("3. Price");
 		    System.out.println("4. Quantity");
-
-		    int choice = scanner.nextInt();
-		    scanner.nextLine();
-
+		    int choice=0;
+		    try {
+		    	choice = scanner.nextInt();
+			    scanner.nextLine();
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("Please enter correct choice..!");
+			}
+		    
 		    switch (choice) {
 
 		    case 1:
@@ -111,14 +129,27 @@ public class ProductController {
 		        break;
 
 		    case 3:
-		        System.out.println("Enter new price:");
-		        price = scanner.nextDouble();
+		        try {
+		        	System.out.println("Enter new price:");
+			        price = scanner.nextDouble();
+			        
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println("Please enter number only..!");
+					return;
+				}
 		        scanner.nextLine();
 		        break;
 
 		    case 4:
-		        System.out.println("Enter new quantity:");
-		        quantity = scanner.nextInt();
+		        try {
+		        	System.out.println("Enter new quantity:");
+			        quantity = scanner.nextInt();
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println("Please enter number only..!");
+					return;
+				}
 		        scanner.nextLine();
 		        break;
 
@@ -131,8 +162,14 @@ public class ProductController {
 		}
 	
 	public void deleteProduct() {
-		System.out.println("Enter the product ID: ");
-		int id= scanner.nextInt();
+		int id=0;
+		try {
+			System.out.println("Enter the product ID: ");
+			 id= scanner.nextInt();
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Please enter correct product id");
+		}
 		scanner.nextLine();
 		
 		productService.deleteProduct(id);
