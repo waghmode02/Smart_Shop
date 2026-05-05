@@ -16,7 +16,7 @@ public class ProductDaoImpl implements ProductDao {
 	private static final String INSERT_PRODUCT = "insert into products (product_name, description, price, quantity) values (?, ?, ?, ?)";
 	private static final String SELECT_QUERY = "select quantity from products where product_id = ?";
 	private static final String USERS_QUERY = "select user_id, first_name, last_name, username, city, email, mobile, role from users";
-	private static final String PURCHASE_HISTORY_QUERY = "select products.product_id, products.product_name, products.description, products.price, purchases.quantity "
+	private static final String PURCHASE_HISTORY_QUERY = "select products.product_id, products.product_name, products.description, products.price, purchases.quantity, purchase_date "
 			+ "from purchases " + "inner join users on purchases.user_id = users.user_id "
 			+ "inner join products ON purchases.product_id = products.product_id " + "where users.username = ?";
 
@@ -40,7 +40,7 @@ public class ProductDaoImpl implements ProductDao {
 
 			return rows > 0;
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		return false;
 	}
@@ -62,7 +62,7 @@ public class ProductDaoImpl implements ProductDao {
 				quantity = rs.getInt("quantity");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 
 		return quantity;
@@ -93,7 +93,7 @@ public class ProductDaoImpl implements ProductDao {
 				list.add(user);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		return list;
 	}
@@ -114,12 +114,13 @@ public class ProductDaoImpl implements ProductDao {
 				Product product = new Product(rs.getString("product_name"), rs.getString("description"),
 						rs.getDouble("price"), rs.getInt("price"));
 				product.setId(rs.getInt("product_id"));
+				product.setPurchaseDate(rs.getString("purchase_date"));
 
 				list.add(product);
 
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		return list;
 	}
@@ -166,7 +167,7 @@ public class ProductDaoImpl implements ProductDao {
 				System.out.println("Product not found.");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 
 	}
@@ -188,7 +189,7 @@ public class ProductDaoImpl implements ProductDao {
 
 			return rows > 0;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		return false;
 	}

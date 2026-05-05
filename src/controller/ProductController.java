@@ -33,15 +33,9 @@ public class ProductController {
 	}
 
 	public void viewProductStock() {
-		int id=0;
-		try {
-			System.out.println("Enter the product id: ");
-			 id = scanner.nextInt();
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("Please enetr correct product id");
-			return;
-		}
+
+		System.out.println("Enter the product id: ");
+		int id = scanner.nextInt();
 		scanner.nextLine();
 
 		int stock = productService.viewProductStock(id);
@@ -55,123 +49,100 @@ public class ProductController {
 	}
 
 	public void viewRegisteredUsers() {
-		
+
 		List<User> users = productService.viewRegisteredUsers();
-		
+
 		if (users.isEmpty()) {
-	        System.out.println("No registered users found.");
-	        return;
-	    }
-
-		for (User user : users) {
-			System.out.println("Registered Users are: " + user);
-		}
-
-	}
-	
-	public void viewPurchaseHistory() {
-		System.out.println("Enter the username: ");
-		String username = scanner.nextLine();
-		
-		List<Product> products = productService.viewPurchaseHistory(username);
-		
-		if (products.isEmpty()) {
-	        System.out.println("No purchase history found.");
-	    } else {
-	        System.out.println("Purchase History for this user: ");
-	        for (Product product : products) {
-	            System.out.println(product);
-	        }
-	    }
-	}
-	
-	public void updateProductDetails() {
-		System.out.println("Enter the product ID to update: ");
-		int id =0;
-		try {
-			 id = scanner.nextInt();
-			scanner.nextLine();
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("Please enter correct product id");
+			System.out.println("No registered users found.");
 			return;
 		}
 		
-		String name = null;
-	    String description = null;
-	    double price = -1;
-	    int quantity = -1;
+		System.out.println("User ID | Name | Username | City | Email | Mobile | Role");
+	    System.out.println("-------------------------------------------------------------");
+	    
+		for (User user : users) {
+			System.out.println(user.getUserId() + " | " + user.getFirstName() + " " + user.getLastName() + " | "
+					+ user.getUsername() + " | " + user.getCity() + " | " + user.getEmail() + " | " + user.getMobile()
+					+ " | " + user.getRole());
+		}
 
-		    System.out.println("What do you want to update?");
-		    System.out.println("1. Name");
-		    System.out.println("2. Description");
-		    System.out.println("3. Price");
-		    System.out.println("4. Quantity");
-		    int choice=0;
-		    try {
-		    	choice = scanner.nextInt();
-			    scanner.nextLine();
-			} catch (Exception e) {
-				// TODO: handle exception
-				System.out.println("Please enter correct choice..!");
+	}
+
+	public void viewPurchaseHistory() {
+		System.out.println("Enter the username: ");
+		String username = scanner.nextLine();
+
+		List<Product> products = productService.viewPurchaseHistory(username);
+
+		if (products.isEmpty()) {
+			System.out.println("No purchase history found.");
+		} else {
+			System.out.println("Date | Product Name | Quantity | Price | Total");
+			System.out.println("------------------------------------------------");
+			
+			for (Product product : products) {
+				double total = product.getPrice() * product.getQuantity();
+				System.out.println(product.getPurchaseDate() + " | " + product.getName() + " | " + product.getQuantity() + " | " + product.getPrice() + " | " + total);
 			}
-		    
-		    switch (choice) {
-
-		    case 1:
-		        System.out.println("Enter new name:");
-		        name = scanner.nextLine();
-		        break;
-
-		    case 2:
-		        System.out.println("Enter new description:");
-		        description = scanner.nextLine();
-		        break;
-
-		    case 3:
-		        try {
-		        	System.out.println("Enter new price:");
-			        price = scanner.nextDouble();
-			        
-				} catch (Exception e) {
-					// TODO: handle exception
-					System.out.println("Please enter number only..!");
-					return;
-				}
-		        scanner.nextLine();
-		        break;
-
-		    case 4:
-		        try {
-		        	System.out.println("Enter new quantity:");
-			        quantity = scanner.nextInt();
-				} catch (Exception e) {
-					// TODO: handle exception
-					System.out.println("Please enter number only..!");
-					return;
-				}
-		        scanner.nextLine();
-		        break;
-
-		    default:
-		        System.out.println("Invalid choice");
-		        return;
-		    }
-
-		    productService.updateProductDetails(id, name, description, price, quantity);
 		}
-	
-	public void deleteProduct() {
-		int id=0;
-		try {
-			System.out.println("Enter the product ID: ");
-			 id= scanner.nextInt();
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("Please enter correct product id");
-		}
+	}
+
+	public void updateProductDetails() {
+		System.out.println("Enter the product ID to update: ");
+		int id = scanner.nextInt();
 		scanner.nextLine();
-		
+
+		String name = null;
+		String description = null;
+		double price = -1;
+		int quantity = -1;
+
+		System.out.println("What do you want to update?");
+		System.out.println("1. Name");
+		System.out.println("2. Description");
+		System.out.println("3. Price");
+		System.out.println("4. Quantity");
+
+		int choice = scanner.nextInt();
+		scanner.nextLine();
+
+		switch (choice) {
+
+		case 1:
+			System.out.println("Enter new name:");
+			name = scanner.nextLine();
+			break;
+
+		case 2:
+			System.out.println("Enter new description:");
+			description = scanner.nextLine();
+			break;
+
+		case 3:
+			System.out.println("Enter new price:");
+			price = scanner.nextDouble();
+			scanner.nextLine();
+			break;
+
+		case 4:
+			System.out.println("Enter new quantity:");
+			quantity = scanner.nextInt();
+			scanner.nextLine();
+			break;
+
+		default:
+			System.out.println("Invalid choice");
+			return;
+		}
+
+		productService.updateProductDetails(id, name, description, price, quantity);
+	}
+
+	public void deleteProduct() {
+		System.out.println("Enter the product ID: ");
+		int id = scanner.nextInt();
+		scanner.nextLine();
+
 		productService.deleteProduct(id);
 	}
 

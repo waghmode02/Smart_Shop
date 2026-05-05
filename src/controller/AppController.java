@@ -91,8 +91,9 @@ public class AppController {
 	private void showAdminMenu() {
 
 		while (true) {
-
+			System.out.println("--------------------------");
 			System.out.println("\n------ ADMIN MENU ------");
+			System.out.println("--------------------------");
 			System.out.println("1. Add Product");
 			System.out.println("2. View Product Stock");
 			System.out.println("3. View Registered Users");
@@ -100,6 +101,7 @@ public class AppController {
 			System.out.println("5. Update Product Details");
 			System.out.println("6. Delete the product from inventory");
 			System.out.println("7. Go Back");
+			System.out.println("--------------------------");
 			int choice=0;
 			try {
 				System.out.print("Enter your choice: ");
@@ -149,7 +151,6 @@ public class AppController {
 			default:
 				System.out.println("Invalid Choice!");
 			}
-			scanner.next();
 		}
 	}
 }

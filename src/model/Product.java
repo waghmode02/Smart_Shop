@@ -7,6 +7,7 @@ public class Product {
 	private String description;
 	private double price;
 	private int quantity;
+	private String purchaseDate;
 
 	public Product(String name, String description, double price, int quantity) {
 		this.name = name;
@@ -58,6 +59,14 @@ public class Product {
 		this.quantity = quantity;
 	}
 
+	public String getPurchaseDate() {
+	    return purchaseDate;
+	}
+
+	public void setPurchaseDate(String purchaseDate) {
+	    this.purchaseDate = purchaseDate;
+	}
+	
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", description=" + description + ", price=" + price
