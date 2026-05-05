@@ -1,7 +1,9 @@
 package controller;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import exception.ErrorResponce;
 import login.Login;
 import productBrowsing.ProductBrowsingImpl;
 import service.impl.UserRegistrationImpl;
@@ -21,10 +23,19 @@ public class AppController {
 		while (!flag) {
 
 			menuHandler.menu();
-
-			System.out.println("Enter your choice >>");
-			int choice = scanner.nextInt();
-			scanner.nextLine();
+			int choice=0;
+			try {
+				System.out.println("Enter your choice >>");
+				 choice = scanner.nextInt();
+				if(choice<1 || choice>8) {
+					throw new ErrorResponce("Please select choice between 1 and 8");
+				}
+			}catch (InputMismatchException e){
+				System.out.println("Please enter numbers only..!");
+			}
+			catch (Exception e) {
+				 System.out.println(e.getMessage());
+			}
 
 			switch (choice) {
 
@@ -73,6 +84,7 @@ public class AppController {
 			default:
 				System.out.println("Invalid Choice!");
 			}
+			scanner.nextLine();
 		}
 	}
 
@@ -88,9 +100,21 @@ public class AppController {
 			System.out.println("5. Update Product Details");
 			System.out.println("6. Delete the product from inventory");
 			System.out.println("7. Go Back");
-
-			System.out.print("Enter your choice: ");
-			int choice = scanner.nextInt();
+			int choice=0;
+			try {
+				System.out.print("Enter your choice: ");
+				 choice = scanner.nextInt();
+				 if(choice<1 || choice >7) {
+					 throw new ErrorResponce("Please select choice between 1 and 7");
+				 }
+			} 
+			catch(InputMismatchException ex) {
+				System.out.println("Please enter numbers only..!");
+			}
+			catch (Exception e) {
+				// TODO: handle exception
+				System.out.println(e.getMessage());
+			}
 
 			switch (choice) {
 
@@ -124,6 +148,7 @@ public class AppController {
 			default:
 				System.out.println("Invalid Choice!");
 			}
+			scanner.next();
 		}
 	}
 }
