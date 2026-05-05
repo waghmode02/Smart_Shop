@@ -18,6 +18,7 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 	private static final String PURCHASE_HISTORY_QUERY = "select products.product_id, products.product_name, products.description, products.price, purchases.quantity "
 			+ "from purchases " + "inner join users on purchases.user_id = users.user_id "
 			+ "inner join products ON purchases.product_id = products.product_id " + "where users.user_id = ?";
+	public static final String FETCH_PRODUCT_BY_ID="select * from products where product_id=?";
 
 	private static final Scanner scanner = new Scanner(System.in);
 
@@ -51,7 +52,6 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 		String keyword = scanner.next();
 
 		try {
-			boolean found = false;
 			Connection conn = DBConnection.getConnection();
 			String query = "select * from products where product_name like ?";
 			PreparedStatement ps = conn.prepareStatement(query);
@@ -65,7 +65,6 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 			System.out.println("Product ID | Name | Description | Price | Quantity");
 
 			while (rs.next()) {
-				found = true;
 				System.out.println(rs.getInt("product_id") + " | " + rs.getString("product_name") + " | "
 						+ rs.getString("description") + " | " + rs.getBigDecimal("price") + " | "
 						+ rs.getInt("quantity"));
@@ -265,5 +264,39 @@ public class ProductBrowsingImpl implements ProductBrowsing {
 		} catch (Exception e) {
 			System.out.println("Error:"+e.getMessage());
 		}
+	}
+
+	@Override
+	public void viewProductDetailsByID() {
+		// TODO Auto-generated method stub
+		int productId=0;
+		try {
+			System.out.println("Enter product id");
+			productId=scanner.nextInt();
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Please enter correct product Id");
+		}
+		try {
+			Connection conn = DBConnection.getConnection();
+			PreparedStatement ps=conn.prepareStatement(FETCH_PRODUCT_BY_ID);
+			ps.setInt(1, productId);
+			ResultSet rs = ps.executeQuery();
+			if(!rs.next()) {
+				System.out.println("Products not found..!");
+				return;
+			}
+			System.out.println("Product ID | Name | Description | Price | Quantity");
+
+			while (rs.next()) {
+				System.out.println(rs.getInt("product_id") + " | " + rs.getString("product_name") + " | "
+						+ rs.getString("description") + " | " + rs.getBigDecimal("price") + " | "
+						+ rs.getInt("quantity"));
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Error:"+e.getMessage());
+		}
+		
 	}
 }

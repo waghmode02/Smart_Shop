@@ -6,4 +6,5 @@ public interface ProductBrowsing {
 	public  void viewPurchaseHistory();
 	public  void viewAllCartItem();
 	public void addToCart();
+	public void viewProductDetailsByID();
 }
