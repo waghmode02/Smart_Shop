@@ -139,11 +139,24 @@ public class ProductController {
 	}
 
 	public void deleteProduct() {
-		System.out.println("Enter the product ID: ");
-		int id = scanner.nextInt();
-		scanner.nextLine();
 
-		productService.deleteProduct(id);
+	    System.out.println("Enter the Product ID to delete >>");
+
+	    int id = scanner.nextInt();
+	    scanner.nextLine();
+
+	    System.out.println("Are you sure you want to delete this product? (Yes/No) >>");
+	    String confirmation = scanner.nextLine();
+
+	    if (confirmation.equalsIgnoreCase("Yes")) {
+
+	        System.out.println("Deleting product from database...");
+
+	        productService.deleteProduct(id);
+
+	    } else {
+	        System.out.println("Product deletion cancelled.");
+	    }
 	}
 
 }
