@@ -9,7 +9,7 @@ public class DBConnection {
 	private static final String driver = "com.mysql.cj.jdbc.Driver";
 	private static final String url = "jdbc:mysql://localhost:3306/smartshop";
 	private static final String user = "root";
-	private static final String password = "root";
+	private static final String password = "pallavi1535";
 
 	public static Connection getConnection() throws SQLException {
 

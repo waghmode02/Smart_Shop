@@ -110,7 +110,14 @@ public class ProductController {
 
 		case 1:
 			System.out.println("Enter new name:");
+			try {
 			name = scanner.nextLine();
+			}
+			catch(Exception e){
+				System.out.println(e.getMessage());
+				
+			}
+			
 			break;
 
 		case 2:
@@ -122,6 +129,10 @@ public class ProductController {
 			System.out.println("Enter new price:");
 			price = scanner.nextDouble();
 			scanner.nextLine();
+			if (price < 0) {
+			    System.out.println("Price cannot be negative");
+			    return;
+			}
 			break;
 
 		case 4:
