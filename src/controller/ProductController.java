@@ -138,6 +138,10 @@ public class ProductController {
 		case 4:
 			System.out.println("Enter new quantity:");
 			quantity = scanner.nextInt();
+			if (quantity < 0) {
+			    System.out.println("quantity cannot be negative");
+			    return;
+			}
 			scanner.nextLine();
 			break;
 
